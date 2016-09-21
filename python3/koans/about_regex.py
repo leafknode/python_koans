@@ -3,6 +3,8 @@
 
 from runner.koan import *
 import re
+
+
 class AboutRegex(Koan):
     """
         These koans are based on the Ben's book: Regular Expressions in 10 minutes.
@@ -15,8 +17,8 @@ class AboutRegex(Koan):
             Lesson 1 Matching Literal String
         """
         string = "Hello, my name is Felix and this koans are based on the Ben's book: Regular Expressions in 10 minutes."
-        m = re.search(__, string)
-        self.assertTrue(m and m.group(0) and m.group(0)== 'Felix', "I want my name")
+        m = re.search("Felix", string)
+        self.assertTrue(m and m.group(0) and m.group(0) == 'Felix', "I want my name")
 
     def test_matching_literal_text_how_many(self):
         """
@@ -32,10 +34,10 @@ class AboutRegex(Koan):
 
         """
         string = "Hello, my name is Felix and this koans are based on the Ben's book: Regular Expressions in 10 minutes. Repeat My name is Felix"
-        m = re.match('Felix', string) #TIP: Maybe match it's not the best option
+        m = re.findall('Felix', string)  # TIP: Maybe match it's not the best option
 
         # I want to know how many times appears my name
-        self.assertEqual(m, __)
+        self.assertEqual(len(m), 2)
 
     def test_matching_literal_text_not_case_sensitivity(self):
         """
@@ -47,8 +49,8 @@ class AboutRegex(Koan):
         """
         string = "Hello, my name is Felix or felix and this koans is based on the Ben's book: Regular Expressions in 10 minutes."
 
-        self.assertEqual(re.findall("felix", string), __)
-        self.assertEqual(re.findall("felix", string, re.IGNORECASE), __)
+        self.assertEqual(len(re.findall("felix", string)), 1)
+        self.assertEqual(len(re.findall("felix", string, re.IGNORECASE)), 2)
 
     def test_matching_any_character(self):
         """
@@ -56,17 +58,16 @@ class AboutRegex(Koan):
 
             . matches any character, alphabetic characters, digits and .
         """
-        string = "pecks.xlx\n"    \
-                + "orders1.xls\n" \
-                + "apec1.xls\n"   \
-                + "na1.xls\n"     \
-                + "na2.xls\n"     \
-                + "sa1.xls"
+        string = "pecks.xlx\n" \
+                 + "orders1.xls\n" \
+                 + "apec1.xls\n" \
+                 + "na1.xls\n" \
+                 + "na2.xls\n" \
+                 + "sa1.xls"
 
         # TIP: remember the name of this lesson
 
-        change_this_search_string = 'a..xlx' # <-- I want to find all uses of myArray
-        self.assertEquals(len(re.findall(change_this_search_string, string)),3)
+        self.assertEquals(len(re.findall(".a.*xls", string)), 3)
 
     def test_matching_set_character(self):
         """
@@ -75,19 +76,18 @@ class AboutRegex(Koan):
             A set of characters is defined using the metacharacters [ and ]. Everything between them is part of the set and
             any one of the set members must match (but not all).
         """
-        string = "sales.xlx\n"    \
-                + "sales1.xls\n"  \
-                + "orders3.xls\n" \
-                + "apac1.xls\n" \
-                + "sales2.xls\n"  \
-                + "na1.xls\n"  \
-                + "na2.xls\n"  \
-                + "sa1.xls\n"  \
-                + "ca1.xls"
+        string = "sales.xlx\n" \
+                 + "sales1.xls\n" \
+                 + "orders3.xls\n" \
+                 + "apac1.xls\n" \
+                 + "sales2.xls\n" \
+                 + "na1.xls\n" \
+                 + "na2.xls\n" \
+                 + "sa1.xls\n" \
+                 + "ca1.xls"
         # I want to find all files for North America(na) or South America(sa), but not (ca)
         # TIP you can use the pattern .a. which matches in above test but in this case matches more than you want
-        change_this_search_string = '[nsc]a[2-9].xls'
-        self.assertEquals(len(re.findall(change_this_search_string, string)),3)
+        self.assertEquals(len(re.findall("(na|sa)[1-2].*.xls", string)), 3)
 
     def test_anything_but_matching(self):
         """
@@ -96,21 +96,17 @@ class AboutRegex(Koan):
             Character sets can be negated using the ^ metacharacter.
 
         """
-        string = "sales.xlx\n"    \
-                + "sales1.xls\n"  \
-                + "orders3.xls\n" \
-                + "apac1.xls\n" \
-                + "sales2.xls\n"  \
-                + "sales3.xls\n"  \
-                + "europe2.xls\n"  \
-                + "sam.xls\n"  \
-                + "na1.xls\n"  \
-                + "na2.xls\n"  \
-                + "sa1.xls\n"  \
-                + "ca1.xls"
+        string = "sales.xlx\n" \
+                 + "sales1.xls\n" \
+                 + "orders3.xls\n" \
+                 + "apac1.xls\n" \
+                 + "sales2.xls\n" \
+                 + "sales3.xls\n" \
+                 + "europe2.xls\n" \
+                 + "sam.xls\n" \
+                 + "na1.xls\n" \
+                 + "na2.xls\n" \
+                 + "sa1.xls\n" \
+                 + "ca1.xls"
 
-        # I want to find the name sam
-        change_this_search_string = '[^nc]am'
-        self.assertEquals(re.findall(change_this_search_string, string), ['sam.xls'])
-
-
+        self.assertEquals(re.findall('(sam.*)', string), ['sam.xls'])
